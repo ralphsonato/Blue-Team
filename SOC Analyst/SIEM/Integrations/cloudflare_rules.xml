@@ -1,0 +1,59 @@
+<group name="cloudflare,">
+
+  <!-- Regra base: qualquer evento Cloudflare -->
+  <rule id="910000" level="3">
+    <decoded_as>json</decoded_as>
+    <field name="cf_source">\.+</field>
+    <description>Cloudflare: evento recebido - fonte: $(cf_source)</description>
+    <group>cloudflare,</group>
+  </rule>
+
+  <!-- Firewall: qualquer ação -->
+  <rule id="910001" level="5">
+    <if_sid>910000</if_sid>
+    <field name="cf_source">firewall</field>
+    <description>Cloudflare Firewall: $(action) - IP $(clientIP) [$(clientCountryName)]</description>
+    <group>cloudflare,firewall,</group>
+  </rule>
+
+  <!-- Firewall: bloqueio -->
+  <rule id="910002" level="10">
+    <if_sid>910001</if_sid>
+    <action>block</action>
+    <description>Cloudflare Firewall: BLOQUEIO - IP $(clientIP) [$(clientCountryName)] Regra: $(ruleId)</description>
+    <group>cloudflare,firewall,block,</group>
+  </rule>
+
+  <!-- WAF: qualquer ação -->
+  <rule id="910010" level="5">
+    <if_sid>910000</if_sid>
+    <field name="cf_source">waf</field>
+    <description>Cloudflare WAF: $(action) - IP $(clientIP) [$(clientCountryName)]</description>
+    <group>cloudflare,waf,</group>
+  </rule>
+
+  <!-- WAF: bloqueio -->
+  <rule id="910011" level="12">
+    <if_sid>910010</if_sid>
+    <action>block</action>
+    <description>Cloudflare WAF: BLOQUEIO - IP $(clientIP) [$(clientCountryName)] Regra: $(ruleId)</description>
+    <group>cloudflare,waf,block,</group>
+  </rule>
+
+  <!-- Audit Logs: alteração de configuração -->
+  <rule id="910020" level="8">
+    <if_sid>910000</if_sid>
+    <field name="cf_source">audit</field>
+    <description>Cloudflare Audit: alteracao de configuracao detectada</description>
+    <group>cloudflare,audit,</group>
+  </rule>
+
+  <!-- DDoS: ataque detectado -->
+  <rule id="910030" level="12">
+    <if_sid>910000</if_sid>
+    <field name="cf_source">ddos</field>
+    <description>Cloudflare DDoS: ataque detectado [$(clientCountryName)]</description>
+    <group>cloudflare,ddos,</group>
+  </rule>
+
+</group>
