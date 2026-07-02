@@ -4,7 +4,7 @@ Base conceitual de como um SOC funciona na prática: escalação por tier, frame
 
 ## Conteúdo
 
-01. [O que é um SOC](01-O-que-e-um-SOC.md)
+01. [O que é um SOC](01-O-que-é-um-SOC.md)
 02. [Papéis e Responsabilidades](02-Papeis-e-Responsabilidades.md)
 03. [Modelos Operacionais](03-Modelos-Operacionais.md)
 04. [Cyber Kill Chain](04-Cyber-Kill-Chain.md)
